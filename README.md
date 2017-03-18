@@ -30,6 +30,8 @@ Now link the plugin using the unique code from your device
 # ln -s /usr/lib/munin/plugins/sensor_temp_ds18b20_ /etc/munin/plugins/sensor_temp_ds18b20_000008299930
 ```
 
+NOTE: when linking the file the `28-` is left out and just uses the 1wire ID.
+
 Restart the Munin Node service
 
 ## RHT03 - Temperature and Humidity
