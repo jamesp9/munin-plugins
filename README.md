@@ -1,7 +1,8 @@
-# munin-rpi-sensors
-Graph assorted sensors attached to the Raspberry Pi
+# munin-plugins
+Assorted Munin plugins that I've made for various sensors and gpu monitoring.
 
 ## Internal Temperature Sensor
+sensor_temp_internal.py
 
 ## DS18B20 - Temperature
 To use the Dallas 1-Wire Temperature sensor plugin, you will first need to find out the unique 64bit rom code of your device.
