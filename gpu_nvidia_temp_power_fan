@@ -1,0 +1,46 @@
+#!/bin/sh
+
+output_config() {
+    echo "graph_title Nvidia GPU"
+    echo "graph_args --base 1000"
+    echo "graph_category sensors"
+    echo "graph_info nvidia-smi output"
+    echo "graph_vlabel celsius / W / %"
+    echo "gpu_temp.label temperature"
+    echo "gpu_power.label power draw"
+    echo "gpu_fan_speed.label fan speed"
+
+}
+
+output_values() {
+    tpf="$(nvidia-smi --format=csv --query-gpu=temperature.gpu,power.draw,fan.speed | tail -1)"
+    printf "gpu_temp.value %d\n" $(echo $tpf | cut -d',' -f1 | cut -d' ' -f1)
+    printf "gpu_power.value %.2f\n" $(echo $tpf | cut -d',' -f2 | xargs | cut -d' ' -f1)
+    printf "gpu_fan_speed.value %d\n" $(echo $tpf | cut -d',' -f3 | xargs | cut -d' ' -f1)
+}
+
+output_usage() {
+    printf >&2 "%s - munin plugin to graph an example value\n" ${0##*/}
+    printf >&2 "Usage: %s [config]\n" ${0##*/}
+}
+
+case $# in
+    0)
+        output_values
+        ;;
+    1)
+        case $1 in
+            config)
+                output_config
+                ;;
+            *)
+                output_usage
+                exit 1
+                ;;
+        esac
+        ;;
+    *)
+        output_usage
+        exit 1
+        ;;
+esac

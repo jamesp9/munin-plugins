@@ -1,0 +1,48 @@
+#!/bin/sh
+
+output_config() {
+    echo "graph_title Nvidia GPU Clocks"
+    echo "graph_args --base 1000"
+    echo "graph_category sensors"
+    echo "graph_info nvidia-smi output"
+    echo "graph_vlabel MHz"
+    echo "graphics.label graphics"
+    echo "sm.label sm"
+    echo "memory.label memory"
+    echo "video.label video"
+
+}
+
+output_values() {
+    csv_clocks="$(nvidia-smi --format=csv --query-gpu=clocks.current.graphics,clocks.current.sm,clocks.current.memory,clocks.current.video | tail -1)"
+    printf "graphics.value %d\n" $(echo $csv_clocks | cut -d',' -f1 | cut -d' ' -f1)
+    printf "sm.value %d\n" $(echo $csv_clocks | cut -d',' -f2 | xargs | cut -d' ' -f1)
+    printf "memory.value %d\n" $(echo $csv_clocks | cut -d',' -f3 | xargs | cut -d' ' -f1)
+    printf "video.value %d\n" $(echo $csv_clocks | cut -d',' -f4 | xargs | cut -d' ' -f1)
+}
+
+output_usage() {
+    printf >&2 "%s - munin plugin to graph an example value\n" ${0##*/}
+    printf >&2 "Usage: %s [config]\n" ${0##*/}
+}
+
+case $# in
+    0)
+        output_values
+        ;;
+    1)
+        case $1 in
+            config)
+                output_config
+                ;;
+            *)
+                output_usage
+                exit 1
+                ;;
+        esac
+        ;;
+    *)
+        output_usage
+        exit 1
+        ;;
+esac
