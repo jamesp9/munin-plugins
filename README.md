@@ -35,4 +35,17 @@ NOTE: when linking the file the `28-` is left out and just uses the 1wire ID.
 
 Restart the Munin Node service
 
-## RHT03 - Temperature and Humidity
+## NTP - Chrony
+To use the ntp_chrony plugins. If this repository has been checked out somewhere
+in your home directory. Then you will need to create the file
+`/etc/munin/plugin-conf.d/chrony.conf` as root with contents:
+```
+[ntp_chrony_*]
+user your_user_name
+```
+Then link the plugins in the `/etc/munin/plugins` directory.
+```
+ls -s /home/your_user_name/github/munin-plugins/ntp_chrony_activity.bash /etc/munin/plugins/ntp_chrony_activity
+ls -s /home/your_user_name/github/munin-plugins/ntp_chrony_tracking.bash /etc/munin/plugins/ntp_chrony_tracking
+```
+Then restart `munin-node`.
